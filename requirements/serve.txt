@@ -1,8 +1,8 @@
-fastapi
-uvicorn
-torch
-torchvision
-PyYAML
-Pillow
-python-multipart
-httpx
+fastapi==0.141.1
+uvicorn==0.52.0
+torch==2.13.0
+torchvision==0.28.0
+PyYAML==6.0.3
+Pillow==12.3.0
+python-multipart==0.0.32
+httpx==0.28.1

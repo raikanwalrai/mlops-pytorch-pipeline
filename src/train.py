@@ -179,8 +179,15 @@ def main():
     """
 
     # Load configuration
-    config = load_config()
+    #config = load_config() # before dockerization
 
+    # for dockerization
+    config_path = os.getenv(
+        "CONFIG_PATH",
+        "configs/config.yaml",
+    )
+
+    config = load_config(config_path)
 
     checkpoint_dir = config["checkpoint"]["save_dir"]
     checkpoint_file = config["checkpoint"]["filename"]
