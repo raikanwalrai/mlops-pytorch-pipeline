@@ -20,3 +20,9 @@ __pycache__/
 
 # Logs
 *.log
+
+data/
+checkpoints/
+__pycache__/
+.pytest_cache/
+.venv/
