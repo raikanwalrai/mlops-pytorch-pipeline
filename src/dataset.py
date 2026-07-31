@@ -1,10 +1,7 @@
 from torchvision import transforms
-from torchvision import transforms
+
 from torchvision.datasets import CIFAR10
 from torch.utils.data import DataLoader, Subset
-from torch.utils.data import DataLoader
-
-
 
 def get_transforms():
     """
@@ -57,57 +54,60 @@ def load_dataset(data_dir="./data"):
 
     return train_dataset, test_dataset
 
-
-from torch.utils.data import DataLoader, Subset
-
 def create_dataloaders(
     batch_size=64,
     data_dir="./data",
     num_workers=2,
     subset_size=None,
 ):
-    """
-    Creates DataLoaders for the CIFAR-10 training and test datasets.
 
-    Args:
-        batch_size (int): Number of images per batch.
-        data_dir (str): Directory containing the dataset.
-        num_workers (int): Number of worker processes.
-        subset_size (int | None): Number of training samples to use.
-                                  If None, use the full dataset.
+    print("=" * 70)
+    print("INSIDE create_dataloaders()")
+    print("=" * 70)
 
-    Returns:
-        tuple:
-            (train_loader, test_loader)
-    """
-    #print(f"Subset size parameter: {subset_size}")
+    print(f"batch_size  = {batch_size}")
+    print(f"num_workers = {num_workers}")
+    print(f"subset_size = {subset_size}")
+
     train_dataset, test_dataset = load_dataset(data_dir)
-    #print(f"Original training dataset size: {len(train_dataset)}")
+
+    print(f"Original train size : {len(train_dataset)}")
+    print(f"Original test size  : {len(test_dataset)}")
+
     if subset_size is not None:
+
         train_dataset = Subset(
             train_dataset,
             range(min(subset_size, len(train_dataset)))
         )
-    #print(f"Training dataset after subset: {len(train_dataset)}")
+
+        test_dataset = Subset(
+            test_dataset,
+            range(min(subset_size, len(test_dataset)))
+        )
+
+    print(f"Subset train size : {len(train_dataset)}")
+    print(f"Subset test size  : {len(test_dataset)}")
 
     train_loader = DataLoader(
-        dataset=train_dataset,
+        train_dataset,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=num_workers
+        num_workers=num_workers,
     )
 
     test_loader = DataLoader(
-        dataset=test_dataset,
+        test_dataset,
         batch_size=batch_size,
         shuffle=False,
-        num_workers=num_workers
+        num_workers=num_workers,
     )
 
-    #print(f"Train loader batches: {len(train_loader)}")
-    #print(f"Test loader batches : {len(test_loader)}")
+    print(f"Train batches : {len(train_loader)}")
+    print(f"Test batches  : {len(test_loader)}")
+    print("=" * 70)
+    print("DataLoaders created successfully.")
     return train_loader, test_loader
-
 
 
     

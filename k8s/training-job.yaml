@@ -1,0 +1,88 @@
+apiVersion: batch/v1
+kind: Job
+
+metadata:
+  name: pytorch-training-job
+  namespace: mlops-pipeline
+
+spec:
+  backoffLimit: 2
+
+  template:
+
+    metadata:
+      labels:
+        app: pytorch-training
+
+    spec:
+      restartPolicy: Never
+
+      containers:
+      - name: trainer
+        image: kanwalrai/mlops-train:v5
+        imagePullPolicy: Always
+        #image: kanwalrai/mlops-train:v4
+        #image: kanwalrai/mlops-train:v2
+        #imagePullPolicy: Always
+        #imagePullPolicy: IfNotPresent
+        #imagePullPolicy: Never
+        #image: mlops-train:v2
+        #image: kanwalrai/mlops-train:v3
+        #imagePullPolicy: Always
+        
+        resources:
+          requests:
+            cpu: "2"
+            memory: "4Gi"
+
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+
+        env:
+        - name: CONFIG_PATH
+          value: /app/configs/config.yaml
+
+        volumeMounts:
+
+        - name: config-volume
+          mountPath: /app/configs
+          readOnly: true
+
+        - name: data-volume
+          mountPath: /app/data
+
+        - name: checkpoints-volume
+          mountPath: /app/checkpoints
+
+      volumes:
+
+      - name: config-volume
+        configMap:
+          name: mlops-config
+
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: data-pvc
+
+      - name: checkpoints-volume
+        persistentVolumeClaim:
+          claimName: checkpoints-pvc
+
+# ==========================================================
+# OPTIONAL GPU CONFIGURATION (Bonus Requirement)
+# ==========================================================
+#
+# Uncomment when deploying to a GPU-enabled Kubernetes cluster.
+#
+# resources:
+#   limits:
+#     nvidia.com/gpu: 1
+#
+# nodeSelector:
+#   accelerator: nvidia
+#
+# Alternatively, use tolerations if your cluster schedules
+# GPU nodes using taints.
+#
+# ==========================================================

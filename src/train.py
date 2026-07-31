@@ -178,16 +178,26 @@ def main():
     Main training pipeline.
     """
 
+    print("=" * 80)
+    print("TRAINING SCRIPT STARTED")
+    print("=" * 80)
+    print("Loading configuration...")
+
     # Load configuration
     #config = load_config() # before dockerization
-
+    
+  
     # for dockerization
     config_path = os.getenv(
         "CONFIG_PATH",
         "configs/config.yaml",
     )
+    
+    print("=== Training job started ===")
 
     config = load_config(config_path)
+
+    print("Configuration loaded")
 
     checkpoint_dir = config["checkpoint"]["save_dir"]
     checkpoint_file = config["checkpoint"]["filename"]
@@ -196,19 +206,40 @@ def main():
         checkpoint_dir,
         checkpoint_file,
     )
+
+
+    print("Configuration loaded.")
+    print("Selecting device...")
+  
     # Select device
     device = get_device()
+    print("Device selected")
 
+    
+    print("Creating dataloaders...")
+    print("Loading dataset...")
     # Create DataLoaders
+    print("Before create_dataloaders")
+
+    print(f"subset_size = {config['dataset']['subset_size']}")
+    print(f"batch_size  = {config['dataset']['batch_size']}")
+    print(f"num_workers = {config['dataset']['num_workers']}")
+    print(f"epochs      = {config['training']['epochs']}")
+
     train_loader, test_loader = create_dataloaders(
         batch_size=config["dataset"]["batch_size"],
         data_dir=config["dataset"]["data_dir"],
         num_workers=config["dataset"]["num_workers"],
         subset_size=config["dataset"].get("subset_size"),
     )
+    print("After create_dataloaders")
+    print("Dataset loaded")
+    print("Dataloaders created.")
 
     print(f"Training batches : {len(train_loader)}")
     print(f"Testing batches  : {len(test_loader)}")
+
+    print("Creating model...")
 
     # Create model
     model = create_model(
@@ -304,5 +335,30 @@ def main():
             
 
 
+# if __name__ == "__main__":
+#     main()
+
+import traceback
+
 if __name__ == "__main__":
-    main()
+
+    print("=" * 80)
+    print("TRAINING CONTAINER STARTED")
+    print("=" * 80)
+
+    try:
+        main()
+
+        print("=" * 80)
+        print("TRAINING FINISHED SUCCESSFULLY")
+        print("=" * 80)
+
+    except Exception:
+
+        print("=" * 80)
+        print("EXCEPTION OCCURRED")
+        print("=" * 80)
+
+        traceback.print_exc()
+
+        raise

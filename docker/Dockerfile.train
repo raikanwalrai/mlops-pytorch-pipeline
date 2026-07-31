@@ -72,4 +72,8 @@ COPY . .
 ENV CONFIG_PATH=/app/configs/config.yaml
 
 # Start training
-CMD ["python", "-m", "src.train"]
+# CMD ["python", "-m", "src.train"]
+CMD ["python", "-u", "-m", "src.train"]
+
+ENV PYTHONUNBUFFERED=1
+

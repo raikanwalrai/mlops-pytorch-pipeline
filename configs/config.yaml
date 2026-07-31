@@ -1,28 +1,35 @@
+# ==========================================================
 # Dataset Configuration
+# ==========================================================
 dataset:
   data_dir: "./data"
-  batch_size: 256 #64
-  num_workers: 2
-  subset_size: 10 #1000
+  batch_size: 2
+  num_workers: 0
+  subset_size: 10
 
+# ==========================================================
 # Model Configuration
+# ==========================================================
 model:
   num_classes: 10
   pretrained: true
 
+# ==========================================================
 # Training Configuration
+# ==========================================================
 training:
-  epochs: 1 #10
-  learning_rate: 0.001 
+  epochs: 1
+  learning_rate: 0.001
 
+# ==========================================================
 # Checkpoint Configuration
+# ==========================================================
 checkpoint:
   save_dir: "./checkpoints"
   filename: "best_model.pth"
 
-# Early Stopping Configuration
+# ==========================================================
+# Early Stopping
+# ==========================================================
 early_stopping:
   patience: 3
-
-
- 
