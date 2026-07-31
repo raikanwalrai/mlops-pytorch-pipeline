@@ -26,3 +26,22 @@ checkpoints/
 __pycache__/
 .pytest_cache/
 .venv/
+
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Data and generated artifacts
+data/
+checkpoints/
+
+# IDE
+.vscode/
+.idea/
+

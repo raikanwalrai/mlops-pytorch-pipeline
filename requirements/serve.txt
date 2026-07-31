@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+torch
+torchvision
+PyYAML
+Pillow
+python-multipart
+httpx
