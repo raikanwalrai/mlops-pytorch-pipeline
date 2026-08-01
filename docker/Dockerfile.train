@@ -1,0 +1,79 @@
+# # ==========================================================
+# # Stage 1: Builder
+# # ==========================================================
+# FROM python:3.12-slim AS builder
+
+# WORKDIR /app
+
+# COPY requirements/train.txt requirements/train.txt
+
+# RUN pip install --no-cache-dir --upgrade pip && \
+#     pip install --no-cache-dir -r requirements/train.txt
+
+# COPY . .
+
+# # ==========================================================
+# # Stage 2: Runtime
+# # ==========================================================
+# FROM python:3.12-slim
+
+# WORKDIR /app
+
+# COPY --from=builder /usr/local/lib/python3.12 /usr/local/lib/python3.12
+# COPY --from=builder /usr/local/bin /usr/local/bin
+
+# COPY . .
+
+# ENV CONFIG_PATH=/app/configs/config.yaml
+
+# CMD ["python", "-m", "src.train"]
+
+
+
+# ==========================================================
+# Stage 1: Builder
+# ==========================================================
+FROM python:3.12-slim AS builder
+
+WORKDIR /app
+
+# Create an isolated virtual environment
+RUN python -m venv /opt/venv
+
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Copy only the requirements first (better layer caching)
+COPY requirements/train.txt requirements/train.txt
+
+# Install dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements/train.txt
+
+# Copy project files
+COPY . .
+
+# ==========================================================
+# Stage 2: Runtime
+# ==========================================================
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Copy only the virtual environment from the builder
+COPY --from=builder /opt/venv /opt/venv
+
+# Use the copied virtual environment
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Copy application source
+COPY . .
+
+# Configuration
+ENV CONFIG_PATH=/app/configs/config.yaml
+
+# Start training
+# CMD ["python", "-m", "src.train"]
+CMD ["python", "-u", "-m", "src.train"]
+
+ENV PYTHONUNBUFFERED=1
+

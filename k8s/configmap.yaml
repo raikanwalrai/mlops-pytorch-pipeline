@@ -1,0 +1,73 @@
+# apiVersion: v1
+# kind: ConfigMap
+
+# metadata:
+#   name: mlops-config
+#   namespace: mlops-pipeline
+
+# data:
+#   config.yaml: |
+#     # Dataset Configuration
+#     dataset:
+#       data_dir: "./data"
+#       batch_size: 256
+#       num_workers: 2
+#       subset_size: 10
+
+#     # Model Configuration
+#     model:
+#       num_classes: 10
+#       pretrained: true
+
+#     # Training Configuration
+#     training:
+#       epochs: 1
+#       learning_rate: 0.001
+
+#     # Checkpoint Configuration
+#     checkpoint:
+#       save_dir: "./checkpoints"
+#       filename: "best_model.pth"
+
+#     # Early Stopping Configuration
+#     early_stopping:
+#       patience: 3
+
+      
+
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: mlops-config
+  namespace: mlops-pipeline
+
+data:
+  config.yaml: |
+    # Dataset Configuration
+    dataset:
+      data_dir: "./data"
+      batch_size: 256
+      num_workers: 2
+      subset_size: 10
+
+    # Model Configuration
+    model:
+      num_classes: 10
+      pretrained: true
+
+    # Training Configuration
+    training:
+      epochs: 1
+      learning_rate: 0.001
+
+    # Checkpoint Configuration
+    checkpoint:
+      save_dir: "/app/checkpoints"
+      filename: "best_model.pth"
+
+    # Early Stopping Configuration
+    early_stopping:
+      patience: 3
+
+      

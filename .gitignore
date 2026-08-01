@@ -1,0 +1,47 @@
+# Python virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Pytest
+.pytest_cache/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Model checkpoints
+*.pth
+*.pt
+
+# Logs
+*.log
+
+data/
+checkpoints/
+__pycache__/
+.pytest_cache/
+.venv/
+
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Data and generated artifacts
+data/
+checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
