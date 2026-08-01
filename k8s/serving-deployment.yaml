@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: pytorch-serving
+  namespace: mlops-pipeline
+
+spec:
+  replicas: 2
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+  selector:
+    matchLabels:
+      app: pytorch-serving
+
+  template:
+    metadata:
+      labels:
+        app: pytorch-serving
+
+    spec:
+      containers:
+      - name: serving
+
+        image: kanwalrai/mlops-serve:v1
+        imagePullPolicy: Always
+
+        ports:
+        - containerPort: 8080
+
+        env:
+        - name: CONFIG_PATH
+          value: /app/configs/config.yaml
+
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "1"
+            memory: "2Gi"
+
+        volumeMounts:
+
+        - name: checkpoint-volume
+          mountPath: /app/checkpoints
+          readOnly: true
+
+        - name: config-volume
+          mountPath: /app/configs
+          readOnly: true
+
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          periodSeconds: 10
+          failureThreshold: 3
+
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 5
+
+      volumes:
+
+      - name: checkpoint-volume
+        persistentVolumeClaim:
+          claimName: checkpoints-pvc
+
+      - name: config-volume
+        configMap:
+          name: mlops-config
